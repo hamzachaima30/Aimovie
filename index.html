@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dramatika</title>
+
+<style>
+/* ADDED: CSS Variables for theme support */
+:root {
+  --bg-primary: #141414;
+  --bg-secondary: #000;
+  --bg-card: #222;
+  --bg-modal: #181818;
+  --bg-navbar: rgba(0,0,0,.85);
+  --text-primary: white;
+  --text-secondary: #ccc;
+  --text-tertiary: #aaa;
+  --accent-color: #e50914;
+  --input-bg: white;
+  --input-text: #000;
+}
+
+/* ADDED: Light mode theme - Clean and soft brown style */
+[data-theme="light"] {
+  --bg-primary: #F5F1EB;
+  --bg-secondary: #FAF8F3;
+  --bg-card: #FFFFFF;
+  --bg-modal: #FFFFFF;
+  --bg-navbar: rgba(250,248,243,.95);
+  --text-primary: #5D4037;
+  --text-secondary: #6D4C41;
+  --text-tertiary: #8D6E63;
+  --accent-color: #8B6F47;
+  --input-bg: #F9F7F4;
+  --input-text: #5D4037;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{
+  background:var(--bg-primary);
+  color:var(--text-primary);
+  scroll-behavior:smooth;
+  transition:background 0.3s ease, color 0.3s ease;
+}
+
+/* NAVBAR */
+.navbar{
+  position:fixed;top:0;width:100%;
+  display:flex;justify-content:space-between;
+  align-items:center;
+  padding:15px 50px;background:var(--bg-navbar);
+  z-index:100;
+  transition:background 0.3s ease;
+}
+.logo{
+  font-size:28px;font-weight:bold;
+  display:inline-block;
+  position:relative;
+  /* ADDED: Multiple animations for logo */
+  animation:fadeInSlide 1s ease-out, logoPulse 3s ease-in-out infinite 2s, continuousGlow 4s ease-in-out infinite 3s;
+  cursor:pointer;
+}
+.logo .letter:first-child{
+  color:var(--accent-color);
+  display:inline-block;
+  /* ADDED: Individual letter animations for first letter */
+  animation:letterBounce 0.6s ease-out 0.5s backwards, letterGlow 2s ease-in-out infinite 1.5s;
+  font-weight:900;
+  text-shadow:0 0 10px var(--accent-color);
+}
+.logo .letter{
+  display:inline-block;
+  color:var(--text-primary);
+  transition:color 0.3s ease, transform 0.3s ease;
+  position:relative;
+}
+/* ADDED: Logo letter animations - consolidated */
+.logo .letter:not(:first-child){
+  animation:letterWave 0.8s ease-out backwards, subtleFloat 3s ease-in-out infinite 2s;
+}
+.logo .letter:nth-child(1) { animation-delay: 0.1s; }
+.logo .letter:nth-child(2) { 
+  animation:letterWave 0.8s ease-out 0.2s backwards, subtleFloat 3s ease-in-out infinite 2.2s; 
+}
+.logo .letter:nth-child(3) { 
+  animation:letterWave 0.8s ease-out 0.3s backwards, subtleFloat 3s ease-in-out infinite 2.3s; 
+}
+.logo .letter:nth-child(4) { 
+  animation:letterWave 0.8s ease-out 0.4s backwards, subtleFloat 3s ease-in-out infinite 2.4s; 
+}
+.logo .letter:nth-child(5) { 
+  animation:letterWave 0.8s ease-out 0.5s backwards, subtleFloat 3s ease-in-out infinite 2.5s; 
+}
+.logo .letter:nth-child(6) { 
+  animation:letterWave 0.8s ease-out 0.6s backwards, subtleFloat 3s ease-in-out infinite 2.6s; 
+}
+.logo .letter:nth-child(7) { 
+  animation:letterWave 0.8s ease-out 0.7s backwards, subtleFloat 3s ease-in-out infinite 2.7s; 
+}
+.logo .letter:nth-child(8) { 
+  animation:letterWave 0.8s ease-out 0.8s backwards, subtleFloat 3s ease-in-out infinite 2.8s; 
+}
+.logo .letter:nth-child(9) { 
+  animation:letterWave 0.8s ease-out 0.9s backwards, subtleFloat 3s ease-in-out infinite 2.9s; 
+}
+.logo:hover .letter{
+  animation:letterBounce 0.5s ease;
+  transform:translateY(-5px);
+}
+.logo:hover .letter:nth-child(even){
+  animation-delay:0.1s;
+}
+.navbar input{
+  padding:8px 12px;border:none;border-radius:4px;
+  background:var(--input-bg);
+  color:var(--input-text);
+  transition:all 0.3s ease;
+}
+.navbar input:focus{
+  outline:2px solid var(--accent-color);
+  transform:scale(1.05);
+}
+/* ADDED: Light mode navbar input styling */
+[data-theme="light"] .navbar input{
+  border:1px solid rgba(139,111,71,0.3);
+}
+[data-theme="light"] .navbar input:focus{
+  border-color:var(--accent-color);
+  box-shadow:0 0 0 3px rgba(139,111,71,0.2);
+}
+
+/* ADDED: Theme toggle button */
+.theme-toggle{
+  background:none;
+  border:none;
+  color:var(--text-primary);
+  font-size:24px;
+  cursor:pointer;
+  padding:5px 10px;
+  margin-left:15px;
+  transition:transform 0.3s ease;
+}
+.theme-toggle:hover{
+  transform:rotate(20deg) scale(1.1);
+}
+
+/* ADDED: Keyframe animations */
+@keyframes fadeInSlide {
+  from {
+    opacity:0;
+    transform:translateY(-20px);
+  }
+  to {
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity:0;
+    transform:translateY(30px);
+  }
+  to {
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow:0 0 5px var(--accent-color);
+  }
+  50% {
+    text-shadow:0 0 20px var(--accent-color), 0 0 30px var(--accent-color);
+  }
+}
+
+/* ADDED: Enhanced logo animations */
+@keyframes logoPulse {
+  0%, 100% {
+    transform:scale(1);
+  }
+  50% {
+    transform:scale(1.05);
+  }
+}
+
+@keyframes letterBounce {
+  0%, 100% {
+    transform:translateY(0) scale(1);
+  }
+  50% {
+    transform:translateY(-10px) scale(1.1);
+  }
+}
+
+@keyframes letterGlow {
+  0%, 100% {
+    text-shadow:0 0 5px var(--accent-color), 0 0 10px rgba(229,9,20,0.3);
+  }
+  50% {
+    text-shadow:0 0 15px var(--accent-color), 0 0 25px rgba(229,9,20,0.6), 0 0 35px rgba(229,9,20,0.4);
+  }
+}
+
+@keyframes letterWave {
+  0% {
+    opacity:0;
+    transform:translateY(20px) rotateX(90deg);
+  }
+  100% {
+    opacity:1;
+    transform:translateY(0) rotateX(0deg);
+  }
+}
+
+@keyframes continuousGlow {
+  0%, 100% {
+    filter:drop-shadow(0 0 5px var(--accent-color));
+  }
+  50% {
+    filter:drop-shadow(0 0 15px var(--accent-color)) drop-shadow(0 0 25px rgba(229,9,20,0.5));
+  }
+}
+
+@keyframes subtleFloat {
+  0%, 100% {
+    transform:translateY(0);
+  }
+  50% {
+    transform:translateY(-2px);
+  }
+}
+
+/* HERO */
+.hero{
+  height:100vh;
+  background:
+    linear-gradient(to bottom,rgba(0,0,0,.6),var(--bg-primary)),
+    url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4");
+  background-size:cover;
+  background-position:center;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:60px;
+  transition:background 0.3s ease;
+  position:relative;
+  overflow:hidden;
+  /* ADDED: Background zoom animation */
+  animation:heroBackgroundZoom 20s ease-in-out infinite;
+}
+/* ADDED: Background zoom animation */
+@keyframes heroBackgroundZoom {
+  0%, 100% {
+    background-size:100% auto;
+    background-position:center center;
+  }
+  50% {
+    background-size:120% auto;
+    background-position:center center;
+  }
+}
+/* ADDED: Light mode hero overlay */
+[data-theme="light"] .hero{
+  background:
+    linear-gradient(to bottom,rgba(245,241,235,.7),var(--bg-primary)),
+    url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4");
+}
+/* ADDED: Animated gradient overlay */
+.hero::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(45deg, 
+    rgba(229,9,20,0.1) 0%, 
+    transparent 25%,
+    transparent 75%,
+    rgba(229,9,20,0.1) 100%);
+  animation:gradientShift 8s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes gradientShift {
+  0%, 100% {
+    opacity:0.3;
+    transform:translateX(-50px) translateY(-50px);
+  }
+  50% {
+    opacity:0.6;
+    transform:translateX(50px) translateY(50px);
+  }
+}
+.hero h1{
+  font-size:56px;
+  /* ADDED: Hero h1 animations */
+  animation:heroTitleFadeIn 1.2s ease-out, heroTitleGlow 3s ease-in-out infinite 1.5s;
+  position:relative;
+  z-index:1;
+  transition:color 0.3s ease, transform 0.3s ease;
+  cursor:default;
+}
+.hero h1:hover{
+  transform:scale(1.05);
+  text-shadow:0 0 30px rgba(229,9,20,0.8);
+}
+.hero p{
+  font-size:20px;
+  color:var(--text-secondary);
+  transition:color 0.3s ease, transform 0.3s ease;
+  /* ADDED: Hero paragraph animations */
+  animation:heroParagraphFadeIn 1.5s ease-out 0.3s backwards, heroParagraphFloat 4s ease-in-out infinite 2s;
+  position:relative;
+  z-index:1;
+  margin-top:20px;
+}
+.hero p:hover{
+  transform:translateX(10px);
+  color:var(--accent-color);
+}
+/* ADDED: Hero title fade in animation */
+@keyframes heroTitleFadeIn {
+  0% {
+    opacity:0;
+    transform:translateY(50px) scale(0.8);
+  }
+  100% {
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+/* ADDED: Hero title glow animation */
+@keyframes heroTitleGlow {
+  0%, 100% {
+    text-shadow:0 0 10px rgba(229,9,20,0.3), 0 0 20px rgba(229,9,20,0.2);
+  }
+  50% {
+    text-shadow:0 0 20px rgba(229,9,20,0.6), 0 0 40px rgba(229,9,20,0.4), 0 0 60px rgba(229,9,20,0.2);
+  }
+}
+/* ADDED: Hero paragraph fade in animation */
+@keyframes heroParagraphFadeIn {
+  0% {
+    opacity:0;
+    transform:translateX(-30px);
+  }
+  100% {
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+/* ADDED: Hero paragraph float animation */
+@keyframes heroParagraphFloat {
+  0%, 100% {
+    transform:translateY(0);
+  }
+  50% {
+    transform:translateY(-5px);
+  }
+}
+/* ADDED: Floating particles effect */
+.hero::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(229,9,20,0.3), transparent),
+    radial-gradient(2px 2px at 60% 70%, rgba(229,9,20,0.2), transparent),
+    radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.1), transparent),
+    radial-gradient(1px 1px at 80% 10%, rgba(229,9,20,0.2), transparent),
+    radial-gradient(2px 2px at 90% 60%, rgba(229,9,20,0.3), transparent);
+  background-size:200% 200%;
+  animation:particlesFloat 15s ease-in-out infinite;
+  pointer-events:none;
+  opacity:0.6;
+}
+@keyframes particlesFloat {
+  0%, 100% {
+    background-position:0% 0%, 100% 100%, 50% 50%, 80% 10%, 90% 60%;
+  }
+  50% {
+    background-position:100% 100%, 0% 0%, 50% 50%, 20% 90%, 10% 40%;
+  }
+}
+
+/* SECTIONS */
+.section{
+  padding:50px;
+  /* ADDED: Entrance animation for sections */
+  animation:fadeInUp 0.6s ease-out;
+  opacity:1;
+  transition:opacity 0.3s ease;
+}
+.section h2{
+  color:var(--text-primary);
+  transition:color 0.3s ease;
+  margin-bottom:20px;
+}
+/* ADDED: Hide sections when no matching cards */
+.section.hidden{
+  display:none;
+}
+.movie-row{display:flex;gap:25px;overflow-x:auto}
+.movie-row::-webkit-scrollbar{display:none}
+
+/* CARDS */
+.movie-card{
+  min-width:240px;background:var(--bg-card);border-radius:8px;
+  overflow:hidden;cursor:pointer;
+  /* ADDED: Improved transitions with shadow and lift */
+  transition:transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  opacity:1;
+  transform:translateY(0);
+  /* ADDED: Entrance animation delay for staggered effect */
+  animation:fadeInUp 0.5s ease-out backwards;
+  border:1px solid transparent;
+}
+/* ADDED: Light mode card border */
+[data-theme="light"] .movie-card{
+  border:1px solid rgba(139,111,71,0.2);
+  box-shadow:0 2px 8px rgba(139,111,71,0.1);
+}
+/* ADDED: Staggered animation delays */
+.movie-card:nth-child(1) { animation-delay: 0.1s; }
+.movie-card:nth-child(2) { animation-delay: 0.2s; }
+.movie-card:nth-child(3) { animation-delay: 0.3s; }
+.movie-card:nth-child(4) { animation-delay: 0.4s; }
+.movie-card:nth-child(5) { animation-delay: 0.5s; }
+
+.movie-card:hover{
+  transform:scale(1.1) translateY(-5px);
+  /* ADDED: Enhanced shadow on hover */
+  box-shadow:0 10px 30px rgba(229,9,20,0.4);
+}
+/* ADDED: Hide cards that don't match search */
+.movie-card.hidden{
+  display:none;
+}
+.movie-card img{width:100%;height:340px;object-fit:cover}
+.movie-card h3{padding:12px;color:var(--text-primary)}
+
+/* MODAL */
+.modal{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,.85);
+  display:none;align-items:center;justify-content:center;
+  z-index:200;
+  /* ADDED: Fade animation for modal */
+  opacity:0;
+  transition:opacity 0.3s ease, background 0.3s ease;
+}
+/* ADDED: Light mode modal background */
+[data-theme="light"] .modal{
+  background:rgba(93,64,55,.85);
+}
+.modal.show{
+  opacity:1;
+}
+.modal-content{
+  background:var(--bg-modal);width:70%;max-width:900px;
+  border-radius:10px;display:flex;overflow:hidden;
+  /* ADDED: Scale animation for modal */
+  transform:scale(0.8);
+  transition:transform 0.3s ease, background 0.3s ease;
+  border:1px solid transparent;
+}
+/* ADDED: Light mode modal border */
+[data-theme="light"] .modal-content{
+  border:1px solid rgba(139,111,71,0.3);
+  box-shadow:0 10px 40px rgba(93,64,55,0.3);
+}
+.modal.show .modal-content{
+  transform:scale(1);
+}
+.modal img{width:320px}
+.modal-info{padding:25px;color:var(--text-primary)}
+.modal-info p{color:var(--text-secondary);margin:8px 0}
+.modal-info a{
+  display:inline-block;margin-top:15px;
+  background:var(--accent-color);color:white;
+  padding:10px 18px;text-decoration:none;
+  border-radius:4px;
+  transition:background 0.3s ease, transform 0.2s ease;
+}
+.modal-info a:hover{
+  background:#b8070f;
+  transform:scale(1.05);
+}
+.close{
+  position:absolute;top:20px;right:30px;
+  font-size:30px;cursor:pointer;
+  color:var(--text-primary);
+  transition:transform 0.2s ease;
+}
+.close:hover{
+  transform:rotate(90deg) scale(1.1);
+}
+
+/* ADDED: Improved subscription section */
+.subscription{
+  background:linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  padding:80px 50px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:background 0.3s ease;
+}
+/* ADDED: Subtle background pattern */
+.subscription::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(circle at 20% 50%, rgba(229,9,20,0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(229,9,20,0.1) 0%, transparent 50%);
+  pointer-events:none;
+}
+/* ADDED: Brown theme pattern for light mode */
+[data-theme="light"] .subscription::before{
+  background:radial-gradient(circle at 20% 50%, rgba(139,111,71,0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(139,111,71,0.15) 0%, transparent 50%);
+}
+.subscription h2{
+  font-size:36px;
+  margin-bottom:30px;
+  position:relative;
+  z-index:1;
+  color:var(--text-primary);
+  transition:color 0.3s ease;
+}
+/* ADDED: Subscription form container */
+.subscription-form{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  align-items:center;
+  max-width:500px;
+  margin:0 auto;
+  position:relative;
+  z-index:1;
+}
+/* ADDED: Styled subscription input */
+.subscription input{
+  flex:1;
+  padding:15px 20px;
+  border:2px solid rgba(255,255,255,0.2);
+  border-radius:50px;
+  background:rgba(255,255,255,0.1);
+  color:var(--text-primary);
+  font-size:16px;
+  transition:all 0.3s ease;
+  backdrop-filter:blur(10px);
+}
+/* ADDED: Light mode input styling */
+[data-theme="light"] .subscription input{
+  border:2px solid rgba(139,111,71,0.3);
+  background:rgba(255,255,255,0.8);
+  color:var(--text-primary);
+}
+.subscription input::placeholder{
+  color:var(--text-secondary);
+}
+.subscription input:focus{
+  outline:none;
+  border-color:var(--accent-color);
+  background:rgba(255,255,255,0.15);
+  transform:scale(1.02);
+}
+[data-theme="light"] .subscription input:focus{
+  background:rgba(255,255,255,0.95);
+  border-color:var(--accent-color);
+  box-shadow:0 0 0 3px rgba(139,111,71,0.2);
+}
+/* ADDED: Styled subscription button */
+.subscription button{
+  padding:15px 30px;
+  background:var(--accent-color);
+  color:white;
+  border:none;
+  border-radius:50px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  white-space:nowrap;
+}
+.subscription button:hover{
+  background:#b8070f;
+  transform:scale(1.05);
+  box-shadow:0 5px 20px rgba(229,9,20,0.4);
+}
+/* ADDED: Light mode button styling */
+[data-theme="light"] .subscription button{
+  background:#8B6F47;
+  color:#FAF8F3;
+}
+[data-theme="light"] .subscription button:hover{
+  background:#6B5537;
+  box-shadow:0 5px 20px rgba(139,111,71,0.4);
+}
+.subscription button:active{
+  transform:scale(0.98);
+}
+
+/* ADDED: Responsive design for subscription */
+@media (max-width: 768px) {
+  .subscription-form{
+    flex-direction:column;
+    width:100%;
+  }
+  .subscription input,
+  .subscription button{
+    width:100%;
+  }
+  .navbar{
+    padding:15px 20px;
+    flex-wrap:wrap;
+  }
+  .navbar input{
+    flex:1;
+    min-width:150px;
+  }
+}
+
+footer{
+  background:var(--bg-secondary);
+  padding:30px;
+  text-align:center;
+  color:var(--text-tertiary);
+  transition:background 0.3s ease, color 0.3s ease;
+}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="logo" id="logo">
+    <span class="letter">D</span>
+    <span class="letter">r</span>
+    <span class="letter">a</span>
+    <span class="letter">m</span>
+    <span class="letter">a</span>
+    <span class="letter">t</span>
+    <span class="letter">i</span>
+    <span class="letter">k</span>
+    <span class="letter">a</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <input id="search" placeholder="Film ou catégorie...">
+    <!-- ADDED: Theme toggle button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </div>
+</nav>
+<section class="hero">
+  <h1>Films et séries en illimité</h1>
+  <p>Romance, drame, horreur et tendances actuelles</p>
+</section>
+<div id="content"></div>
+<section class="subscription">
+  <h2>Prêt à regarder ?</h2>
+  <!-- ADDED: Improved subscription form structure -->
+  <div class="subscription-form">
+    <input id="emailInput" type="email" placeholder="Votre adresse email">
+    <button id="subscribeBtn">Commencer</button>
+  </div>
+</section>
+<footer>© 2026 Dramatika</footer>
+<div class="modal" id="modal">
+  <span class="close" onclick="closeModal()">✖</span>
+  <div class="modal-content">
+    <img id="mImg">
+    <div class="modal-info">
+      <h2 id="mTitle"></h2>
+      <p id="mDuration"></p>
+      <p id="mActors"></p>
+      <p id="mDesc"></p>
+      <a id="mLink" target="_blank">▶ Watch now</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ADDED: Theme management
+const themeToggle = document.getElementById('themeToggle');
+const currentTheme = localStorage.getItem('theme') || 'dark';
+
+// Apply saved theme
+document.documentElement.setAttribute('data-theme', currentTheme);
+updateThemeIcon(currentTheme);
+
+function updateThemeIcon(theme) {
+  themeToggle.textContent = theme === 'dark' ? '🌙' : '☀️';
+}
+
+themeToggle.addEventListener('click', () => {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  updateThemeIcon(newTheme);
+});
+
+const data={
+"Tendances":[
+ {title:"Stranger Things",img:"https://image.tmdb.org/t/p/w500/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",duration:"50 min",actors:"Millie Bobby Brown",desc:"Surnaturel et mystère",link:"https://www.netflix.com/title/80057281"},
+ {title:"Lupin",img:"https://image.tmdb.org/t/p/w500/sgxawbFB5Vi5OkPWQLNfl3dvkNJ.jpg",duration:"45 min",actors:"Omar Sy",desc:"Gentleman cambrioleur",link:"https://www.netflix.com/title/80994082"},
+ {title:"Dark",img:"https://image.tmdb.org/t/p/w500/apbrbWs8M9lyOpJYU5WXrpFbk1Z.jpg",duration:"60 min",actors:"Louis Hofmann",desc:"Voyage temporel",link:"https://www.netflix.com/title/80100172"},
+ {title:"Money Heist",img:"https://image.tmdb.org/t/p/w500/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg",duration:"50 min",actors:"Úrsula Corberó",desc:"Braquage intense",link:"https://www.netflix.com/title/80192098"},
+ {title:"The Witcher",img:"https://image.tmdb.org/t/p/w500/zrPpUlehQaBf8YX2NrVrKK8IEpf.jpg",duration:"55 min",actors:"Henry Cavill",desc:"Fantasy épique",link:"https://www.netflix.com/title/80189685"}
+],
+
+"Romantic":[
+ {title:"Titanic",img:"https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",duration:"3h14",actors:"Leonardo DiCaprio",desc:"Amour tragique",link:"https://www.youtube.com/results?search_query=Titanic+1997+full+movie"},
+ {title:"rocky and rani",img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKln1Ne5k7vlFel9bsGBQ3sdqFcLsPZ-1vOg&s",duration:"2h35",actors:"Ranveer Singh",desc:"Romance éternelle",link:"https://www.youtube.com/watch?v=Hqsgc0GNfK8"},
+ {title:"La La Land",img:"https://image.tmdb.org/t/p/w500/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg",duration:"2h08",actors:"Emma Stone",desc:"Musical romantique",link:"https://www.youtube.com/results?search_query=La+La+Land+full+movie"},
+ {title:"Me Before You",img:"https://play-lh.googleusercontent.com/PulfLegU2QrveU_0y2UEUKpUxORwEOSYI1MCyZwvpJmX2U8cDY2ot2-DQWygoa7CkpQvbe0NCHGfCjlayQ",duration:"1h50",actors:"Emilia Clarke",desc:"Amour & émotion",link:"https://www.youtube.com/results?search_query=Me+Before+You+full+movie"},
+ {title:"Pride & Prejudice",img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoMQJoMCH_REAQQY7J3e7y2zS-nir8Bx43mg&s",duration:"2h07",actors:"Keira Knightley",desc:"Romance classique",link:"https://www.youtube.com/results?search_query=Pride+and+Prejudice+2005+full+movie"}
+],
+
+"Dramatic":[
+ {title:"Joker",img:"https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",duration:"2h02",actors:"Joaquin Phoenix",desc:"Psychologique intense",link:"https://www.youtube.com/results?search_query=Joker+2019+full+movie"},
+ {title:"Forrest Gump",img:"https://image.tmdb.org/t/p/w500/saHP97rTPS5eLmrLQEcANmKrsFl.jpg",duration:"2h22",actors:"Tom Hanks",desc:"Vie exceptionnelle",link:"https://www.youtube.com/results?search_query=Forrest+Gump+full+movie"},
+ {title:"Fight Club",img:"https://image.tmdb.org/t/p/w500/bptfVGEQuv6vDTIMVCHjJ9Dz8PX.jpg",duration:"2h19",actors:"Brad Pitt",desc:"Drame psychologique",link:"https://www.youtube.com/results?search_query=Fight+Club+full+movie"},
+ {title:"The Pianist",img:"https://image.tmdb.org/t/p/w500/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg",duration:"2h30",actors:"Adrien Brody",desc:"Survie & musique",link:"https://www.youtube.com/results?search_query=The+Pianist+full+movie"},
+ {title:"Gladiator",img:"https://image.tmdb.org/t/p/w500/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg",duration:"2h35",actors:"Russell Crowe",desc:"Drame historique",link:"https://www.youtube.com/results?search_query=Gladiator+full+movie"}
+],
+
+"Horror":[
+ {title:"The Nun",img:"https://image.tmdb.org/t/p/w500/6CoRTJTmijhBLJTUNoVSUNxZMEI.jpg",duration:"1h36",actors:"Taissa Farmiga",desc:"Horreur démoniaque",link:"https://www.youtube.com/results?search_query=The+Nun+full+movie"},
+ {title:"IT",img:"https://image.tmdb.org/t/p/w500/9E2y5Q7WlCVNEhP5GiVTjhEhx1o.jpg",duration:"2h15",actors:"Bill Skarsgård",desc:"Clown terrifiant",link:"https://www.youtube.com/results?search_query=IT+2017+full+movie"},
+ {title:"Conjuring",img:"https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrHT704wGF.jpg",duration:"1h52",actors:"Vera Farmiga",desc:"Maison hantée",link:"https://www.youtube.com/results?search_query=The+Conjuring+full+movie"},
+ {title:"Insidious",img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfTTd_JDh-N16fA7SiJLGmI4dF31mmQ3GfdqJ7NQw7wFmGplN64xxa2ApFI_CYEknb534T&s=10",duration:"1h43",actors:"Patrick Wilson",desc:"Terreur surnaturelle",link:"https://www.youtube.com/results?search_query=Insidious+full+movie"},
+ {title:"Sinister",img:"https://image.tmdb.org/t/p/w500/8p3mhjyLjHKtaAv8tFKfvEBtir0.jpg",duration:"1h50",actors:"Ethan Hawke",desc:"Horreur psychologique",link:"https://www.youtube.com/results?search_query=Sinister+full+movie"}
+]
+};
+
+const content=document.getElementById("content");
+const searchInput = document.getElementById("search");
+
+// ADDED: Store references to sections and cards for filtering
+const sections = [];
+const allCards = [];
+
+// Generate sections and cards
+for(let cat in data){
+  const sec=document.createElement("section");
+  sec.className="section";
+  sec.setAttribute('data-category', cat);
+  sec.innerHTML=`<h2>${cat}</h2><div class="movie-row"></div>`;
+  const row=sec.querySelector(".movie-row");
+
+  data[cat].forEach(m=>{
+    const card=document.createElement("div");
+    card.className="movie-card";
+    card.setAttribute('data-title', m.title.toLowerCase());
+    card.setAttribute('data-category', cat.toLowerCase());
+    card.setAttribute('data-actors', m.actors.toLowerCase());
+    card.innerHTML=`<img src="${m.img}"><h3>${m.title}</h3>`;
+    card.onclick=()=>openModal(m);
+    row.appendChild(card);
+    allCards.push({card, movie: m, category: cat});
+  });
+  content.appendChild(sec);
+  sections.push({section: sec, category: cat});
+}
+
+// ADDED: Search functionality - filter by movie title only
+function filterMovies(searchTerm) {
+  const term = searchTerm.trim().toLowerCase();
+  const allMovieCards = document.querySelectorAll('.movie-card');
+  const allSections = document.querySelectorAll('.section');
+  
+  if (!term) {
+    // Restore all movies and sections when input is cleared
+    allMovieCards.forEach(card => {
+      card.classList.remove('hidden');
+    });
+    allSections.forEach(section => {
+      section.classList.remove('hidden');
+    });
+    return;
+  }
+  
+  // Filter movies by title
+  allSections.forEach(section => {
+    const cardsInSection = section.querySelectorAll('.movie-card');
+    let hasVisibleCards = false;
+    
+    cardsInSection.forEach(card => {
+      const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+      
+      if (cardTitle.includes(term)) {
+        card.classList.remove('hidden');
+        hasVisibleCards = true;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    
+    // Hide section if no cards match
+    if (hasVisibleCards) {
+      section.classList.remove('hidden');
+    } else {
+      section.classList.add('hidden');
+    }
+  });
+}
+
+// ADDED: Real-time search event listener
+searchInput.addEventListener('input', function(e) {
+  filterMovies(e.target.value);
+});
+
+function openModal(m){
+  const modal = document.getElementById('modal');
+  const mImg = document.getElementById('mImg');
+  const mTitle = document.getElementById('mTitle');
+  const mDuration = document.getElementById('mDuration');
+  const mActors = document.getElementById('mActors');
+  const mDesc = document.getElementById('mDesc');
+  const mLink = document.getElementById('mLink');
+  
+  // ADDED: Animated modal opening
+  modal.style.display = 'flex';
+  setTimeout(() => {
+    modal.classList.add('show');
+  }, 10);
+  
+  mImg.src=m.img;
+  mTitle.textContent=m.title;
+  mDuration.textContent="Durée : "+m.duration;
+  mActors.textContent="Acteurs : "+m.actors;
+  mDesc.textContent=m.desc;
+  mLink.href=m.link;
+}
+
+function closeModal(){
+  const modal = document.getElementById('modal');
+  // ADDED: Animated modal closing
+  modal.classList.remove('show');
+  setTimeout(() => {
+    modal.style.display = 'none';
+  }, 300);
+}
+
+// ADDED: Close modal on background click
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target.id === 'modal') {
+    closeModal();
+  }
+});
+
+// ADDED: Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('modal');
+    if (modal.classList.contains('show')) {
+      closeModal();
+    }
+  }
+});
+
+// ADDED: Subscription button handler
+document.getElementById('subscribeBtn').addEventListener('click', () => {
+  const emailInput = document.getElementById('emailInput');
+  const email = emailInput.value.trim();
+  if (email && email.includes('@')) {
+    alert('Merci pour votre inscription !');
+    emailInput.value = '';
+  } else {
+    alert('Veuillez entrer une adresse email valide.');
+  }
+});
+</script>
+
+</body>
+</html>
